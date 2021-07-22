@@ -1,4 +1,14 @@
+1. 멀티 스레드에서 공유 자원 접근 문제를 python은 어떻게 해결하는가
+- 생산자, 소비자 문제
+- 모니터
+
+2. 싱글 스레드에서 비동기 작업은 python은 어떻게 처리하는가
+- coroutine, futures, async, await
+
 # 프로세스와 스레드
+
+![그림](https://user-images.githubusercontent.com/57826388/82154517-7c44cc80-98a9-11ea-9848-63a04a8a8b66.png)
+
 ## 1. 프로세스
 - 운영체제로부터 자원을 할당받는 작업의 단위
 - 디스크로부터 메모리에 적재되어 운영체제로부터 주소 공간, 파일, 메모리 등을 할당받으며 이것들을 총칭하여 프로세스라고 함
@@ -126,7 +136,6 @@ if __name__ == "__main__":
 ~~~
 
 # 싱글 스레드 + 코루틴
-![그림](https://media.vlpt.us/images/choijw1116/post/0bf9064d-f4be-4134-912e-8832b80a3b7b/javascript_runtime.png)
 
 ~~~
 import asyncio
