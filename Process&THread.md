@@ -33,6 +33,27 @@
 
 - 따라서 단순히 CPU만을 사용하는 계산작업이라면, 오히려 멀티스레드보다 싱글스레드로 프로그래밍하는 것이 더 효율적이다.
   
+~~~
+from threading import Thread
+
+def work(id, start, end, result):
+    total = 0
+    for i in range(start, end):
+        total += i
+    result.append(total)
+    return
+
+if __name__ == "__main__":
+    START, END = 0, 100000000
+    result = list()
+    th1 = Thread(target=work, args=(1, START, END, result))
+    
+    th1.start()
+    th1.join()
+
+print(f"Result: {sum(result)}")
+~~~
+
 ## 2. 멀티 스레드
 - 프로그램을 다수의 실행 단위로 나누어 실행.
 - 프로세스 내에서 자원을 공유하여 자원 생성과 관리의 중복을 최소화
@@ -49,6 +70,85 @@
 - 멀티 스레딩을 위해 운영체제의 지원이 필요하다.
 - 스레드 스케쥴링을 신경써야 한다.
 
+~~~
+from threading import Thread
+
+def work(id, start, end, result):
+    total = 0
+    for i in range(start, end):
+        total += i
+    result.append(total)
+    return
+
+if __name__ == "__main__":
+    START, END = 0, 100000000
+    result = list()
+    th1 = Thread(target=work, args=(1, START, END//2, result))
+    th2 = Thread(target=work, args=(2, END//2, END, result))
+    
+    th1.start()
+    th2.start()
+    th1.join()
+    th2.join()
+~~~
+
+# 멀티 프로세스
+~~~
+from multiprocessing import Process, Queue
+
+def work(id, start, end, result):
+    total = 0
+    for i in range(start, end):
+        total += i
+    result.put(total)
+    return
+
+if __name__ == "__main__":
+    START, END = 0, 100000000
+    result = Queue()
+    th1 = Process(target=work, args=(1, START, END//2, result))
+    th2 = Process(target=work, args=(2, END//2, END, result))
+    
+    th1.start()
+    th2.start()
+    th1.join()
+    th2.join()
+
+    result.put('STOP')
+    total = 0
+    while True:
+        tmp = result.get()
+        if tmp == 'STOP':
+            break
+        else:
+            total += tmp
+    print(f"Result: {total}")
+~~~
+
 # 싱글 스레드 + 코루틴
 ![그림](https://media.vlpt.us/images/choijw1116/post/0bf9064d-f4be-4134-912e-8832b80a3b7b/javascript_runtime.png)
+
+~~~
+import asyncio
+
+async def factorial(name, number):
+    f = 1
+    for i in range(2, number + 1):
+        print(f"Task {name}: Compute factorial({number}), currently i={i}...")
+        await asyncio.sleep(1)
+        f *= i
+    print(f"Task {name}: factorial({number}) = {f}")
+    return f
+
+async def main():
+    # Schedule three calls *concurrently*:
+    L = await asyncio.gather(
+        factorial("A", 2),
+        factorial("B", 3),
+        factorial("C", 4),
+    )
+    print(L)
+
+asyncio.run(main())
+~~~
 
