@@ -152,3 +152,18 @@ async def main():
 asyncio.run(main())
 ~~~
 
+~~~
+def min():
+    current = yield
+    while True:
+        value = yield current
+        current = min(value, current)
+        
+it = min()
+next(it)
+print(it.send(10))
+print(it.send(4))
+print(it.send(22))
+print(it.send(-6))
+~~~
+

@@ -15,6 +15,7 @@
 # pip install -r requirements.txt
 
 
+
 # 2.
 # 코멘트 자료형(문자 숫자 불린) 변수 콘솔 gui 프린트 포멧팅 형변환 연산자(= == != 사칙연산)
 
