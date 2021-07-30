@@ -36,7 +36,7 @@ while True:
                 for n in range(len(users)):
                     print(users[n].get_name)
 
-                if user_info_list[i][3] == 'student':
+                if login_user.get_who() == 'student':
                     mode = input(print('sutdy or logout: '))
 
                     while True:
@@ -154,10 +154,10 @@ while True:
                             else:
                                 break
 
-                    if mode == 'logout':
-                        users.pop()
+                        if mode == 'logout':
+                            users.pop()
 
-                if user_info_list[i][3] == 'teacher':
+                if login_user.get_who() == 'teacher':
                     mode = input(print('make exam or logout: '))
 
                     while True:
@@ -217,11 +217,10 @@ while True:
 
         for i in range(count):
             if (mail == user_info_list[i][0]) and (name == user_info_list[i][2]):
-                    print(
-                        f'This is your password: {user_info_list[i][1][:int(len(user_info_list[i][1]) / 2)]}{"*" * int(len(user_info_list[i][1]))}')
+                print(
+                    f'This is your password: {user_info_list[i][1][:int(len(user_info_list[i][1]) / 2)]}{"*" * int(len(user_info_list[i][1]))}')
 
         print("You are wrong")
-
 
     else:
         exit()
