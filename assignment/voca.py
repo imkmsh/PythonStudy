@@ -12,7 +12,7 @@ class Voca:
 
     def set_count(self, num):
         if self.count >= 0:
-            return self.count + num
+            self.count += num
 
     def get_count(self):
         return int(self.count)
