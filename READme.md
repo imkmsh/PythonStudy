@@ -175,3 +175,87 @@ print(it.send(4))
 print(it.send(22))
 print(it.send(-6))
 ~~~
+
+# 동기화 문제
+동기화 문제는 상호 배제 문제
+
+
+## 임계 영역(critical section)을 lock으로 보호
+
+- lock은 동기화의 가장 근본 수단
+- 공유 변수 lock, 0 또는 1의 값으로 확인
+
+
+## locking을 원자적으로 처리하는 하드웨어 명령어 
+
+- 공유 변수라는 문제를 해결하기 위해 운영체제가 값 확인과 진입을 원자적으로 처리
+- non-preemptive command
+
+### `TestAndSet()`
+- 한 워드의 내용을 확인하고 수정하는 연산을 원자적으로 처리
+
+~~~
+boolean TestAndSet(boolean *target) {
+    boolean rv = *target
+    *target = TRUE
+    return rv
+}
+  
+do {
+    while (TestAndSet(&lock)) // do nothing
+        // critical section
+    lock = FALSE
+        // remainder section
+}
+while (TRUE)
+~~~
+
+- 누가 먼저 lock을 푸냐의 문제를 해결하기 위해 한정된 대기(bounded wait)를 보장, 공유 데이터 `boolean lock`으로
+~~~
+do {
+    waiting[i] = TRUE
+    key = TRUE
+    while (waiting[i] && key)
+        key = TestAndSet(&lock)
+    waiting[i] = FALSE
+        // critical section
+
+    j = (i + 1) % n
+    while ((j != i) && !waiting[j])
+        j = (j + 1) % n
+       
+    if (j == i)
+        lock = FALSE
+    else
+        waiting[j] = FALSE
+        // remainder section
+}
+while (TRUE)
+~~~
+       
+###`Swap()`
+- 두 워드의 내용을 서로 교환하는 연산을 원자적으로 처리
+~~~
+void Swap(boolean *a, boolean *b) {
+    boolean temp = *a
+    *a = *b
+    *b = temp
+}
+  
+do {
+    key = TRUE
+    while (key == TRUE)
+        Swap(&lock, &key)
+        // critical section
+    lock = FALSE
+        // remainder section
+}
+while (TRUE)
+~~~
+
+## Semaphore
+  
+
+    
+
+도움: https://www.youtube.com/watch?v=_yqQLDujlg8
